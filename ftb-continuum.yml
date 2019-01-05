@@ -1,0 +1,25 @@
+
+FROM dlord/minecraft:java8
+MAINTAINER 4lexNZ
+
+ENV FTB_CONTINUUM_URL https://www.feed-the-beast.com/projects/ftb-continuum/files/2620528/download
+ENV LAUNCHWRAPPER net/minecraft/launchwrapper/1.12/launchwrapper-1.12.2.jar
+
+RUN curl -SL $FTB_CONTINUUM_URL -o /tmp/continuum.zip && \
+    unzip /tmp/continuum.zip -d /opt/minecraft && \
+    mkdir -p /opt/minecraft/$(dirname libraries/${LAUNCHWRAPPER}) && \
+    curl -S https://libraries.minecraft.net/$LAUNCHWRAPPER -o /opt/minecraft/libraries/$LAUNCHWRAPPER && \
+    find /opt/minecraft -name "*.log" -exec rm -f {} \; && \
+    rm -rf /opt/minecraft/ops.* /opt/minecraft/whitelist.* /opt/minecraft/logs/* /tmp/*
+
+# ENV MINECRAFT_VERSION 1.12.2
+# ENV MINECRAFT_STARTUP_JAR FTBserver-1.12.2-14.23.4.2759-universal.jar
+
+COPY eula.txt /opt/minecraft
+
+RUN ls -alrt /opt/minecraft
+RUN sed -i -- 's/false/true/g' /opt/minecraft/eula.txt
+RUN chmod a+x /opt/minecraft/ServerStart.sh
+CMD /opt/minecraft/ServerStart.sh
+
+# docker run --name ftb-continuum -p 25565:25565 -d -e DEFAULT_OP=alexandernz -e MINECRAFT_EULA=true 4lexnz/ftb-continuum
