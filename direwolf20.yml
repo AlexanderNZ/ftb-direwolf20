@@ -2,11 +2,11 @@
 FROM dlord/minecraft:java8
 MAINTAINER 4lexNZ
 
-ENV FTB_CONTINUUM_URL https://www.feed-the-beast.com/projects/ftb-continuum/files/2620528/download
+ENV DIREWOLF20_URL https://ftb.forgecdn.net/FTB2/modpacks/FTBPresentsDirewolf20112/2_4_0/FTBPresentsDirewolf20112Server.zip
 ENV LAUNCHWRAPPER net/minecraft/launchwrapper/1.12/launchwrapper-1.12.2.jar
 
-RUN curl -SL $FTB_CONTINUUM_URL -o /tmp/continuum.zip && \
-    unzip /tmp/continuum.zip -d /opt/minecraft && \
+RUN curl -SL $DIREWOLF20_URL -o /tmp/direwolf.zip && \
+    unzip /tmp/direwolf.zip -d /opt/minecraft && \
     mkdir -p /opt/minecraft/$(dirname libraries/${LAUNCHWRAPPER}) && \
     curl -S https://libraries.minecraft.net/$LAUNCHWRAPPER -o /opt/minecraft/libraries/$LAUNCHWRAPPER && \
     find /opt/minecraft -name "*.log" -exec rm -f {} \; && \
